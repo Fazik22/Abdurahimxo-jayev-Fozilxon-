@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const loadStateFromLocalStorage = () => {
   try {
-    const serializedState = localStorage.getItem('selectedCountries');
+    const serializedState = localStorage.getItem('selectedCoins');
     if (serializedState) {
       return JSON.parse(serializedState);
     }
@@ -15,30 +15,30 @@ const loadStateFromLocalStorage = () => {
 const saveStateToLocalStorage = (state) => {
   try {
     const serializedState = JSON.stringify(state);
-    localStorage.setItem('selectedCountries', serializedState);
+    localStorage.setItem('selectedCoins', serializedState);
   } catch (err) {
     console.error("Error saving state to localStorage:", err);
   }
 };
 
-const selectedCountriesSlice = createSlice({
-  name: 'selectedCountries',
+const selectedCoinsSlice = createSlice({
+  name: 'selectedCoins',
   initialState: loadStateFromLocalStorage(),
   reducers: {
-    addCountry: (state, action) => {
-      const country = action.payload;
-      if (!state.find((item) => item.cca2 === country.cca2)) {
-        state.push(country);
+    addCoin: (state, action) => {
+      const coin = action.payload;
+      if (!state.find((item) => item.id === coin.id)) {
+        state.push(coin);
         saveStateToLocalStorage(state);
       }
     },
-    removeCountry: (state, action) => {
-      const newState = state.filter((country) => country.cca2 !== action.payload);
+    removeCoin: (state, action) => {
+      const newState = state.filter((coin) => coin.id !== action.payload);
       saveStateToLocalStorage(newState);
       return newState;
     },
   },
 });
 
-export const { addCountry, removeCountry } = selectedCountriesSlice.actions;
-export default selectedCountriesSlice.reducer;
+export const { addCoin, removeCoin } = selectedCoinsSlice.actions;
+export default selectedCoinsSlice.reducer;
